@@ -1,8 +1,5 @@
 
-
 from typing import List
-
-from fastapi import HTTPException, status
 from sqlalchemy import select
 
 from api.schemas.user import UserCreate
@@ -26,10 +23,10 @@ class UserRepository:
         if result is None:
             user = User(**user_in.model_dump())
             self.session.add(user)
-            await self.session.commit()
             return user
-
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="This user already register!"
-        )
+    
+    async def get_user_by_id(self, user_id: int) -> User | None:
+        return await self.session.get(User, user_id)
+    
+    # async def delete_user(self):
+    #     pass
